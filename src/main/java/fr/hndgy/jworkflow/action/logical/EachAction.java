@@ -6,58 +6,50 @@ import fr.hndgy.jworkflow.entity.Context;
 import lombok.Builder;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class IfAction extends ActionDefinition {
+public class EachAction extends ActionDefinition {
 
-    private String field;
+    private List<Object> values;
 
-    private String value;
-
-    private List<ActionDefinition> doActions;
-
-    private List<ActionDefinition> elseActions;
+    private ActionDefinition doActions;
 
     @Builder
-    public IfAction(
+    public EachAction(
             String id,
-            String field,
-            String value,
-            List<ActionDefinition> doActions,
-            List<ActionDefinition> elseActions
+            List<Object> values,
+            ActionDefinition doAction
     ) {
-        super(id, "if");
+        super(id, "each");
 
-        this.field = field;
-        this.value = value;
-        this.doActions = doActions;
-        this.elseActions = elseActions;
+        this.values = values;
+        this.doActions = doAction;
     }
 
     @Override
     public ActionResult apply(Context context) {
-        var conditionRes =  Objects.equals(resolve(field, context), value);
+        var index = new AtomicInteger();
 
-        if (conditionRes) {
-            List<ActionResult> results = doActions.stream().map(action -> action.execute(context)).toList();
+        List<ActionResult> results = values.stream()
+                .map(value -> {
+                    context.getParameters()
+                            .put(id + "_item" , value);
+                    context.getParameters()
+                            .put(id + "_index" , index.getAndIncrement());
+                    return doActions.execute(context);
+                }).toList();
 
-            return IfResult.builder()
-                    .conditionResult(conditionRes)
-                    .results(results)
-                    .build();
-        }
+        context.getParameters().remove(id + "_item");
+        context.getParameters().remove(id + "_index");
 
-        List<ActionResult> results = elseActions.stream().map(action -> action.execute(context)).toList();
-
-        return IfResult.builder()
-                .conditionResult(conditionRes)
+        return EachResult.builder()
                 .results(results)
                 .build();
     }
 
     @Override
     protected ActionResult onFail() {
-        return IfResult.builder()
+        return EachResult.builder()
                 .status(ActionResult.Status.FAILURE)
                 .build();
     }

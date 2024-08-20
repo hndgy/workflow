@@ -2,7 +2,23 @@ package fr.hndgy.jworkflow.action.http;
 
 import fr.hndgy.jworkflow.entity.ActionResult;
 import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-@Builder
-public class LogResult extends ActionResult {
+import java.util.Map;
+
+@Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class HttpResult extends ActionResult {
+
+    private Map<String, Object> body;
+
+    @Builder
+    public HttpResult(Status status, Map<String, Object> body) {
+        super(status);
+
+        this.body = body;
+    }
 }

@@ -11,12 +11,12 @@ import java.util.List;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class EarchResult extends ActionResult {
+public class EachResult extends ActionResult {
 
     private List<ActionResult> results;
 
     @Builder
-    public EarchResult(Status status, List<ActionResult> results) {
+    public EachResult(Status status, List<ActionResult> results) {
         super(status);
         this.results = results;
     }

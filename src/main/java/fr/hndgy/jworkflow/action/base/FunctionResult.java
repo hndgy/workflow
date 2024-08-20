@@ -11,14 +11,14 @@ import java.util.Map;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class HttpResult extends ActionResult {
+public class FunctionResult extends ActionResult {
 
-    private Map<String, Object> body;
+    private Object result;
 
     @Builder
-    public HttpResult(Status status, Map<String, Object> body) {
+    public FunctionResult(Status status, Object result) {
         super(status);
 
-        this.body = body;
+        this.result = result;
     }
 }
