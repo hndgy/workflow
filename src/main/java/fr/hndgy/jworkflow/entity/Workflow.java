@@ -3,6 +3,7 @@ package fr.hndgy.jworkflow.entity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 import java.util.Map;
@@ -18,12 +19,14 @@ public class Workflow {
     private Context context;
 
     public static Workflow from(
+            ApplicationContext applicationContext,
             List<ActionDefinition> actions,
             Map<String, Object> parameters
     ) {
         return Workflow.builder()
                 .context(
                         Context.builder()
+                                .applicationContext(applicationContext)
                                 .parameters(parameters)
                                 .build()
                 )

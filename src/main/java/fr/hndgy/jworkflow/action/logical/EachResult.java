@@ -16,8 +16,12 @@ public class EachResult extends ActionResult {
     private List<ActionResult> results;
 
     @Builder
-    public EachResult(Status status, List<ActionResult> results) {
+    public EachResult(
+            Status status,
+            List<ActionResult> results
+    ) {
         super(status);
+
         this.results = results;
     }
 }

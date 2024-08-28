@@ -5,8 +5,10 @@ import fr.hndgy.jworkflow.entity.ActionResult;
 import fr.hndgy.jworkflow.entity.Context;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 public class HttpAction extends ActionDefinition {

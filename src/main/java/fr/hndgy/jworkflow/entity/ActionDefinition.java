@@ -1,5 +1,7 @@
 package fr.hndgy.jworkflow.entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jknack.handlebars.Handlebars;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,15 @@ public abstract class ActionDefinition {
         try {
             return new Handlebars().compileInline(value).apply(context);
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ActionDefinition load(String json, Class<? extends ActionDefinition> clazz) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readValue(json, clazz);
+        } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }

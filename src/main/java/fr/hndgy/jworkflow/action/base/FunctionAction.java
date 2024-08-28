@@ -16,7 +16,7 @@ public class FunctionAction extends ActionDefinition {
 
     @Builder
     public FunctionAction(String id, Function<Context, ?> function) {
-        super(id, "http");
+        super(id, "function");
 
         this.function = function;
     }
